@@ -23,47 +23,82 @@ def newRestaurant():
         restaurant_name = request.form['name']
 
         if (restaurant_name.strip() == ''):
+            # OTOD: send the notification to the user
             return redirect(url_for('newRestaurant'))
         else:
             new_restaurant = Restaurant(name = restaurant_name)
             session.add(new_restaurant)
             session.commit()
+            # OTOD: send the notification to the user
             return redirect(url_for('showRestaurants'))
     else:
         return render_template('newRestaurant.html')
 
 @app.route('/restaurants/<int:restaurant_id>/edit', methods = ['GET', 'POST'])
 def editRestaurant(restaurant_id):
-    if request.method == 'POST':
-        edit_restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one_or_none()
-        if edit_restaurant == None:
-            return redirect(url_for('showRestaurants'))
-        else:
-            restaurant_name = request.form['name']
+    edit_restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one_or_none()
 
-            edit_restaurant.name = restaurant_name
+    if edit_restaurant == None:
+        return redirect(url_for('showRestaurants'))
+    else:
+        if request.method == 'POST':
+            edit_restaurant.name = request.form['name']
             session.add(edit_restaurant)
             session.commit()
-            return redirect(url_for('showRestaurants'))
-    else:
-        edit_restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one_or_none()
-        if edit_restaurant == None:
+            # OTOD: send the notification to the user
             return redirect(url_for('showRestaurants'))
         else:
+            # OTOD: send the notification to the user
             return render_template('editRestaurant.html', restaurant = edit_restaurant)
 
-@app.route('/restaurants/<int:restaurant_id>/delete')
+@app.route('/restaurants/<int:restaurant_id>/delete', methods = ['GET', 'POST'])
 def deleteRestaurant(restaurant_id):
-    return 'This page will be for deleting %s' % restaurant_id
+    delete_restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one_or_none()
+
+    if delete_restaurant == None:
+        # OTOD: send the notification to the user
+        return redirect(url_for('showRestaurants'))
+    else:
+        if request.method == 'POST':
+            session.delete(delete_restaurant)
+            session.commit()
+            return redirect(url_for('showRestaurants'))
+        else:
+            # OTOD: send the notification to the user
+            return render_template('deleteRestaurant.html', restaurant = delete_restaurant)
 
 @app.route('/restaurants/<int:restaurant_id>')
 @app.route('/restaurants/<int:restaurant_id>/menu')
 def showMenu(restaurant_id):
-    return 'This page is the menu of the restaurant %s' % restaurant_id
+    restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one_or_none()
 
-@app.route('/restaurants/<int:restaurant_id>/menu/new')
+    if restaurant == None:
+        return redirect(url_for('showRestaurants'))
+    else:
+        items = session.query(MenuItem).filter_by(restaurant_id = restaurant_id).all()
+        return render_template('menu.html', restaurant = restaurant, items = items)
+
+@app.route('/restaurants/<int:restaurant_id>/menu/new', methods = ['GET', 'POST'])
 def newMenuItem(restaurant_id):
-    return 'This page is for making a new item for restaurant %s' % restaurant_id
+    restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one_or_none()
+    if restaurant == None:
+        return redirect(url_for('showRestaurants'))
+    else:
+        if request.method == 'POST':
+            name = str(request.form['name']).strip()
+            description = str(request.form['description']).strip()
+            price = str(request.form['price']).strip()
+            course = str(request.form['course']).strip()
+
+            if name == '' or description == '' or price == '' or course == '':
+                return redirect(url_for('newMenuItem', restaurant_id = restaurant_id))
+            else:
+                new_menu_item = MenuItem(name = name, description = description, price = price, course = course, restaurant_id = restaurant_id)
+                session.add(new_menu_item)
+                session.commit()
+                return redirect(url_for('showMenu', restaurant_id = restaurant_id))
+        else:
+            return render_template('newMenuItem.html', restaurant = restaurant)
 
 @app.route('/restaurants/<int:restaurant_id>/menu/<int:menu_id>/edit')
 def editMenuItem(restaurant_id, menu_id):

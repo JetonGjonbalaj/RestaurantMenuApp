@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Items</title>
+</head>
+<body>
+    <div>
+        <h1>{{ restaurant.name }}</h1>
+        <a href="{{ url_for('newMenuItem', restaurant_id = restaurant.id) }}">Create New Menu Item</a>
+    </div>
+
+    {% if not items %}
+    
+    <p>There are no available Menu Items right now</p>
+    
+    {% else %}
+        <hr>
+    {% for item in items %}
+        <div>
+            <p>{{ item.name }}</p>
+            <p>{{ item.description }}</p>
+            <p>{{ item.price }}$</p>
+            <p>{{ item.course }}</p>
+            <a href="{{ url_for('editMenuItem', restaurant_id = restaurant.id, menu_id = item.id) }}">Edit</a>
+            <a href="{{ url_for('deleteMenuItem', restaurant_id = restaurant.id, menu_id = item.id) }}">Delete</a>
+        </div>
+        <hr>
+    {% endfor %}
+
+    {% endif %}
+</body>
+</html>

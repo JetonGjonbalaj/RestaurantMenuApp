@@ -9,3 +9,5 @@ I am doing this to practice my backend skills with python.
 4. Now run the command 'python3 server.py'
 
 Enjoy
+
+# Attension, this has nothing to do with the front-end only back-end

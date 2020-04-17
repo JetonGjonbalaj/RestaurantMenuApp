@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Menu Item</title>
+</head>
+<body>
+    <h1>Create new menu item</h1>
+
+    <form action="{{ url_for('newMenuItem', restaurant_id = restaurant.id) }}" method="POST">
+        <div>
+            <label for="name">
+                Name: 
+            </label>
+            <input type="text" id="name" name="name" style="color: #434343;background:#f3f3f3;">
+        </div>
+        <div>
+            <label for="description">
+                Description
+            </label>
+            <textarea name="description" maxlength="250" id="description" style="height: 300px; width: 100%; max-width: 400px; color: #434343; background: #f3f3f3"></textarea>
+        </div>
+        <div>
+            <label for="price">
+                Price
+            </label>
+            <input type="number" id="price" name="price" step="0.01" min="0" max="99999.99" style="color: #434343;background:#f3f3f3;">
+        </div>
+        <div>
+            <label for="course">
+                Course
+            </label>
+            <input type="text" id="course" name="course" style="color: #434343; background: #f3f3f3;">
+        </div>
+        <button>Submit</button>
+        <a href="{{ url_for('showRestaurants') }}">Cancel</a>
+    </form>
+</body>
+</html>
