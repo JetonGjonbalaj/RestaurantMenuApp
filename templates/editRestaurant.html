@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Restaurant</title>
+</head>
+<body>
+    <h1>Edit restaurant</h1>
+
+    <form action="{{ url_for('editRestaurant', restaurant_id = restaurant.id) }}" method="POST">
+        <label for="name">
+            Name: 
+            <input type="text" id="name" name="name" style="color: #434343;background:#f3f3f3;" value="{{ restaurant.name }}">
+            <button>Submit</button>
+            <a href="{{ url_for('showRestaurants') }}">Cancel</a>
+        </label>
+    </form>
+</body>
+</html>
