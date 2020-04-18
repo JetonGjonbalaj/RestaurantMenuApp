@@ -6,9 +6,20 @@
     <title>Menu Items</title>
 </head>
 <body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class=flashes>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+    
     <div>
         <h1>{{ restaurant.name }}</h1>
         <a href="{{ url_for('newMenuItem', restaurant_id = restaurant.id) }}">Create New Menu Item</a>
+        <a href="{{ url_for('showRestaurants') }}">Back to menu</a>
     </div>
 
     {% if not items %}

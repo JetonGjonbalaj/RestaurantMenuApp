@@ -6,6 +6,16 @@
     <title>Add New Menu Item</title>
 </head>
 <body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class=flashes>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+    
     <h1>Create new menu item</h1>
 
     <form action="{{ url_for('newMenuItem', restaurant_id = restaurant.id) }}" method="POST">

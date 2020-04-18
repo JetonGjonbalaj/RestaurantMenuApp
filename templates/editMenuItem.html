@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Menu Item</title>
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class=flashes>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+    
+    <h1>Edit menu item</h1>
+
+    <form action="{{ url_for('editMenuItem', restaurant_id = restaurant.id, menu_id = menu_item.id) }}" method="POST">
+        <div>
+            <label for="name">
+                Name: 
+            </label>
+            <input type="text" value="{{ menu_item.name }}" id="name" name="name" style="color: #434343;background:#f3f3f3;">
+        </div>
+        <div>
+            <label for="description">
+                Description
+            </label>
+            <textarea name="description" maxlength="250" id="description" style="height: 300px; width: 100%; max-width: 400px; color: #434343; background: #f3f3f3">{{ menu_item.description }}</textarea>
+        </div>
+        <div>
+            <label for="price">
+                Price
+            </label>
+            <input type="number" value="{{ menu_item.price }}" id="price" name="price" step="0.01" min="0" max="99999.99" style="color: #434343;background:#f3f3f3;">
+        </div>
+        <div>
+            <label for="course">
+                Course
+            </label>
+            <input type="text" value="{{ menu_item.course }}" id="course" name="course" style="color: #434343; background: #f3f3f3;">
+        </div>
+        <div>
+            Change restaurant
+            <select name="new_restaurant_id" id="new_restaurant_id">
+                {% for r in restaurant_list %}
+                    {% if r.id == restaurant.id %}
+                    <option value="{{ r.id }}" selected="selected">{{ r.name }}</option>
+                    {% else %}
+                    <option value="{{ r.id }}">{{ r.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <button>Submit</button>
+        <a href="{{ url_for('showRestaurants') }}">Cancel</a>
+    </form>
+</body>
+</html>
